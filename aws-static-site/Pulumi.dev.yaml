@@ -1,0 +1,9 @@
+config:
+  aws-static-site:cacheDefaultTTL: "1000"
+  aws-static-site:cacheMinTTL: "650"
+  aws-static-site:domain: iac-examples.com
+  aws-static-site:errorDocument: error.html
+  aws-static-site:indexDocument: index.html
+  aws-static-site:path: www
+  aws-static-site:subdomain: pulumi
+  aws:region: us-east-1
