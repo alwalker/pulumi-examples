@@ -1,0 +1,2 @@
+config:
+  aws-helm:k8sNamespace: nginx-ingress
