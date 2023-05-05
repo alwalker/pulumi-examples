@@ -1,0 +1,65 @@
+ARG FEDORA_VERSION=38
+ARG FEDORA_ARCH=x86_64
+FROM registry.fedoraproject.org/fedora:$FEDORA_VERSION-$FEDORA_ARCH
+
+RUN dnf install -y --refresh \
+    dnf-plugins-core \
+    ncurses \
+    nc \
+    less \
+    gcc \
+    glibc \
+    libgcc \
+    libstdc++ \
+    graphviz \
+    git \
+    python \
+    ca-certificates \
+    tar \
+    wget \
+    tree \
+    vim \
+    unzip \
+    postgresql \
+    redis \
+    ansible \
+    jq \
+    lsof \
+    bind-utils \
+    openssl
+
+#Minio
+ARG FEDORA_VERSION=38
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip -q -u awscliv2.zip \
+    && ./aws/install -i /usr/local/aws-cli -b /usr/local/bin \
+    && rm -rf aws \
+    && rm -f awscliv2.zip
+
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    && chmod +x kubectl \
+    && mv kubectl /usr/local/bin
+
+RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp \
+    && mv /tmp/eksctl /usr/local/bin \
+    && chmod +x /usr/local/bin/eksctl
+
+ARG K9S_VERSION=v0.27.3
+RUN curl --silent --location "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_amd64.tar.gz" | tar xz -C /tmp \
+    && mv /tmp/k9s /usr/local/bin
+
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 \
+    && chmod 700 get_helm.sh \
+    && ./get_helm.sh --no-sudo \
+    && rm -f get_helm.sh
+
+RUN dnf install -y nodejs yarnpkg \
+    && yarn global add typescript
+
+RUN wget --quiet https://get.pulumi.com/releases/sdk/pulumi-v3.66.0-linux-x64.tar.gz -O pulumi.tar.gz \
+    && tar -xzf pulumi.tar.gz \
+    && chmod -R +x pulumi/ \
+    && mv pulumi/* /usr/local/bin/ \
+    && rm -f pulumi.tar.gz && rm -rf pulumi/
+
+RUN dnf clean all  

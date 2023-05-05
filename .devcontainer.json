@@ -1,0 +1,19 @@
+{
+    "image": "pulumi_examples_vscode",
+    "runArgs": [
+        "--userns=keep-id"
+    ],
+    "remoteUser": "root",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,z,type=bind",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "streetsidesoftware.code-spell-checker",
+                "shardulm94.trailing-spaces",
+                "pulumi.pulumi-lsp-client",
+                "ms-kubernetes-tools.vscode-kubernetes-tools"
+            ]
+        }
+    }
+}
